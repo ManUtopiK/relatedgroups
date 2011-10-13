@@ -8,10 +8,14 @@
 elgg_load_library('elgg:relatedgroups');
 
 $page_owner = elgg_get_page_owner_entity();
+elgg_set_context('groups');
 
 if(!($page_owner instanceof ElggGroup) || !$page_owner->canEdit()){
 	forward($page_owner->getURL());
 }
+
+elgg_push_breadcrumb(elgg_echo('group'),'groups/all');
+elgg_push_breadcrumb($page_owner->name, $page_owner->getURL());
 
 $title = elgg_echo('relatedgroups:manage');
 elgg_push_breadcrumb($title);

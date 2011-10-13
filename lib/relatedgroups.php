@@ -38,7 +38,11 @@ function list_relatedgroups($group, $options = array()){
 		$options['relationship'] = 'related';
 		$options['relationship_guid'] = $group->guid;
 	
-		return elgg_list_entities_from_relationship($options);
+		elgg_push_context('relatedgroups');
+		$list = elgg_list_entities_from_relationship($options);
+		elgg_pop_context();
+		
+		return $list;
 		
 	} else {
 		return "";

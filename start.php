@@ -21,8 +21,12 @@ function relatedgroups_init() {
 
 	// Register page handler
 	elgg_register_page_handler('relatedgroups', 'relatedgroups_page_handler');
+	
 	// Register pagesetup event handler	
 	elgg_register_event_handler('pagesetup', 'system', 'relatedgroups_setup_sidebar_menus');
+	
+	// Register an unrelate link to entity menu (max priority to run the last)
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'relatedgroups_related_menu_setup', 9999);
 
 	// Extending views
 	elgg_extend_view('groups/sidebar/members', 'groups/sidebar/relatedgroups');
@@ -70,15 +74,46 @@ function relatedgroups_setup_sidebar_menus() {
  */
 function relatedgroups_page_handler($page){
 	$pages_path = elgg_get_plugins_path() . "relatedgroups/pages";
+	
 	switch($page[0]) {
 		case 'manage':
 			elgg_set_page_owner_guid($page[1]);
 			include($pages_path."/relatedgroups/manage.php");
 			break;
 		case 'view':
-			set_page_owner($page[1]);
+			elgg_set_page_owner_guid($page[1]);
 			include($pages_path."/relatedgroups/view.php");
 			break;
 	}
 }
+
+function relatedgroups_related_menu_setup($hook, $type, $return, $params){
+	
+	$group = elgg_get_page_owner_entity();
+	$othergroup = $params['entity'];
+	
+	if($group instanceof ElggGroup &&
+					$othergroup instanceof ElggGroup &&
+									elgg_in_context('relatedgroups')){
+		
+		// Delete all previous links
+		$return = array();
+		
+		$url = elgg_http_add_url_query_elements('action/relatedgroups/remove', array(
+			'group' => $group->guid,
+			'othergroup' => $othergroup->guid,
+		));
+
+		$options = array(
+			'name' => 'delete',
+			'href' => $url,
+			'text' => "<span class=\"elgg-icon elgg-icon-delete\"></span>",
+			'confirm' => elgg_echo('deleteconfirm'),
+			'text_encode' => false,
+		);
+		$return[] = ElggMenuItem::factory($options);
+	}
+	return $return;
+}
+
 ?>
