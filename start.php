@@ -22,7 +22,7 @@ function relatedgroups_init() {
 	// Register page handler
 	elgg_register_page_handler('relatedgroups', 'relatedgroups_page_handler');
 	// Register pagesetup event handler	
-	elgg_register_event_handler('pagesetup', 'system', 'relatedgroups_pagesetup');
+	elgg_register_event_handler('pagesetup', 'system', 'relatedgroups_setup_sidebar_menus');
 
 	// Extending views
 	elgg_extend_view('groups/sidebar/members', 'groups/sidebar/relatedgroups');
@@ -35,13 +35,27 @@ function relatedgroups_init() {
 	add_group_tool_option('relatedgroups', elgg_echo('relatedgroups:in_frontpage'), false);
 }
 
-function relatedgroups_pagesetup() {
-        global $CONFIG;
-        $page_owner = page_owner_entity();
-        if ($page_owner instanceof ElggGroup && $page_owner->canEdit() && get_context() == "groups") {
-                add_submenu_item(elgg_echo("relatedgroups:manage"),
-                                $CONFIG->wwwroot . "pg/relatedgroups/manage/".$page_owner->getGUID());
-        }
+/**
+ * Configure the groups sidebar menu. Triggered on page setup
+ *
+ */
+function relatedgroups_setup_sidebar_menus() {
+
+	// Get the page owner entity
+	$page_owner = elgg_get_page_owner_entity();
+
+	if (elgg_get_context() == 'groups') {
+		if ($page_owner instanceof ElggGroup) {
+			if (elgg_is_logged_in() && $page_owner->canEdit() || elgg_is_admin_logged_in()) {
+				$url = elgg_get_site_url() . "relatedgroups/manage/{$page_owner->getGUID()}";
+				elgg_register_menu_item('page', array(
+					'name' => 'relatedgroups',
+					'text' => elgg_echo('relatedgroups:manage'),
+					'href' => $url,
+				));
+			}
+		}
+	}
 }
 
 /**
