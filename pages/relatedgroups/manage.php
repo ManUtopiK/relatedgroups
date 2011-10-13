@@ -16,7 +16,7 @@ if(!($page_owner instanceof ElggGroup) || !$page_owner->canEdit()){
 $title = elgg_echo('relatedgroups:manage');
 elgg_push_breadcrumb($title);
 
-$content = elgg_view_relatedgroups_list($page_owner);
+$content = list_relatedgroups($page_owner);
 
 $form_vars = array();
 $body_vars = array('group' => $page_owner);

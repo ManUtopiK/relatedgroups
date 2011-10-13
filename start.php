@@ -72,7 +72,7 @@ function relatedgroups_page_handler($page){
 	$pages_path = elgg_get_plugins_path() . "relatedgroups/pages";
 	switch($page[0]) {
 		case 'manage':
-			set_page_owner($page[1]);
+			elgg_set_page_owner_guid($page[1]);
 			include($pages_path."/relatedgroups/manage.php");
 			break;
 		case 'view':
