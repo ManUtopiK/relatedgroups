@@ -1,13 +1,13 @@
 <label class="relatedgroups-add-autocomplete" style="display:none">
 <?php
 	echo elgg_echo('relatedgroups:add:label'); echo '<br />';
-	echo elgg_view('input/autocomplete', array('name' => 'othergroup'));
+	echo elgg_view('input/autocomplete', array('name' => 'othergroup', 'class' => 'mvm'));
 ?>
 </label>
 <label class="relatedgroups-add-url">
 <?php
 	echo elgg_echo('relatedgroups:addurl:label'); echo '<br />';
-	echo elgg_view('input/url', array('name' => 'othergroup_url'));
+	echo elgg_view('input/url', array('name' => 'othergroup_url', 'class' => 'mvm'));
 ?>
 </label>
 <?php
@@ -17,7 +17,7 @@
 	echo elgg_view('input/submit', array(
 		'value' => elgg_echo('relatedgroups:add:button')));
 ?>
-<a href="" class="relatedgroups-dontwork-link" style="display:none">(<?php echo elgg_echo('relatedgroups:dontwork'); ?>)</a>
+<a href="" class="relatedgroups-dontwork-link mlm" style="display:none">(<?php echo elgg_echo('relatedgroups:dontwork'); ?>)</a>
 
 <script type="text/javascript">
 $(function(){
